@@ -14,3 +14,9 @@ data
 
 # Web vault
 web-vault
+
+# Workers build output
+build/
+.wrangler/
+node_modules/
+.dev.vars

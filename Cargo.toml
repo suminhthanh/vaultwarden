@@ -6,7 +6,7 @@ repository = "https://github.com/dani-garcia/vaultwarden"
 publish = false
 
 [workspace]
-members = ["macros"]
+members = ["macros", "worker", "wasm-audit"]
 
 [package]
 name = "vaultwarden"

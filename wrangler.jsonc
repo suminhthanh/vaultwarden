@@ -1,0 +1,64 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "vaultwarden",
+  "main": "worker/build/worker/shim.mjs",
+  "compatibility_date": "2026-05-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "build": {
+    "command": "cargo install -q worker-build --version '^0.8' && cd worker && worker-build --release"
+  },
+  "vars": {
+    "VAULTWARDEN_ENV": "staging",
+    "DOMAIN": "https://vaultwarden.senlyzer.vn",
+    "SMTP_FROM": "info@marketing.webpilot.cc",
+    "SMTP_FROM_NAME": "Vaultwarden"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "vaultwarden",
+      "database_id": "7894106c-44d5-4cfd-a5ba-7c3c4b7dd0c1",
+      "migrations_dir": "./worker/migrations"
+    }
+  ],
+  "r2_buckets": [
+    { "binding": "ATTACHMENTS", "bucket_name": "vaultwarden-attachments" },
+    { "binding": "SENDS", "bucket_name": "vaultwarden-sends" },
+    { "binding": "ICONS", "bucket_name": "vaultwarden-icons" },
+    { "binding": "WEB_VAULT", "bucket_name": "vaultwarden-web-vault" }
+  ],
+  "kv_namespaces": [
+    { "binding": "CONFIG_KV", "id": "bc0f89db5b3846a1bab21d758e49ced0" },
+    { "binding": "RATELIMIT_KV", "id": "824d85b2315e4f2f869ce0bedb85b305" },
+    { "binding": "SSO_CACHE_KV", "id": "5bd21dc1ae084aa7a13a74c5dec77cde" }
+  ],
+  "durable_objects": {
+    "bindings": [
+      { "name": "USER_NOTIFICATIONS", "class_name": "UserNotificationDO" },
+      { "name": "ANON_NOTIFICATIONS", "class_name": "AnonymousNotificationDO" }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["UserNotificationDO", "AnonymousNotificationDO"]
+    }
+  ],
+  "triggers": {
+    "crons": [
+      "*/5 * * * *",
+      "0 * * * *",
+      "0 0 * * *"
+    ]
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "env": {
+    "production": {
+      "name": "vaultwarden",
+      "vars": { "VAULTWARDEN_ENV": "production" }
+    }
+  }
+}

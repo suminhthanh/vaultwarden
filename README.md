@@ -1,5 +1,22 @@
 ![Vaultwarden Logo](./resources/vaultwarden-logo-auto.svg)
 
+> [!WARNING]
+> ## ☁️ Cloudflare Workers fork
+>
+> **This is an unofficial fork that ports Vaultwarden to run on Cloudflare Workers** (D1 + R2 + KV + Durable Objects), not the upstream Rocket/Diesel server. The shipped artifact lives under [`worker/`](./worker/) and compiles to `wasm32-unknown-unknown`. The original `src/` tree is kept for reference and to make catching up to upstream easier.
+>
+> **Operational docs for this fork:**
+> - [`CLAUDE.md`](./CLAUDE.md) — porting playbook, what survived from upstream vs. what was rewritten, list of stubbed routes (full SSO, Duo OIDC, WebAuthn attestation), D1 quirks to watch for, verification ladder.
+> - [`DEPLOY.md`](./DEPLOY.md) — staging deploy walkthrough (Cloudflare account setup, secrets, optional Resend/MailChannels email).
+> - [`scripts/deploy-staging.sh`](./scripts/deploy-staging.sh) — idempotent provisioner.
+> - [`tests/e2e/`](./tests/e2e/) — vitest harness booting `wrangler dev` against local D1; must stay green (currently 117/117).
+>
+> ### Disclaimer
+>
+> This fork is **maintained best-effort**, has **not been audited**, and is **not endorsed by the upstream Vaultwarden project, Bitwarden Inc., or Cloudflare**. SSO/OIDC sign-in, Duo OIDC, and full WebAuthn attestation verification are deliberately stubbed (TOTP / email 2FA / YubiKey are fully wired). Use at your own risk and **do not** report issues encountered with this fork to the upstream Vaultwarden tracker — open an issue against this fork instead. Bitwarden® is a registered trademark of Bitwarden Inc.; this project is unaffiliated.
+
+---
+
 An alternative server implementation of the Bitwarden Client API, written in Rust and compatible with [official Bitwarden clients](https://bitwarden.com/download/) [[disclaimer](#disclaimer)], perfect for self-hosted deployment where running the official resource-heavy service might not be ideal.
 
 ---
